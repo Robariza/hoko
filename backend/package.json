@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
-    "dev" : "nodemon app.js"
+    "dev": "nodemon app.js"
   },
   "author": "hoko",
   "license": "ISC",
@@ -16,6 +16,7 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "mongodb": "^6.9.0",
+    "mongoose": "^8.7.0",
     "nodemon": "^3.1.7"
   }
 }
