@@ -1,6 +1,10 @@
 // Importa la librería de Mongoose, que facilita la interacción con MongoDB usando modelos y esquemas.
 import mongoose from 'mongoose';
 
+// Importa un middleware personalizado llamado 'updateTimestamp'.
+// Este middleware se usará para actualizar el campo 'updatedAt' antes de guardar un documento.
+import { updateTimestamp } from '../middlewares/updateTimestamp.js';
+
 // Define un esquema para los productos, que representa la estructura de los documentos de productos en la base de datos.
 // 'productSchema' especifica los campos que tendrá cada documento y sus tipos de datos.
 const productSchema = new mongoose.Schema({
@@ -27,8 +31,33 @@ const productSchema = new mongoose.Schema({
     stock: {
         type: Number,
         default: 0,
-    }
+    },
+
+    // Campo 'images', que es de tipo String. Aquí se almacenará la URL de la imagen o imágenes del producto.
+    // Tiene un valor por defecto de una cadena vacía ('').
+    images: {
+        type: String,
+        default: ''
+    },
+
+    // Campo 'createdAt', que es de tipo Date y almacena la fecha en la que se creó el producto.
+    // Tiene un valor por defecto que es la fecha actual al momento de crear el producto (Date.now).
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+
+    // Campo 'updatedAt', que es de tipo Date y almacena la fecha de la última actualización del producto.
+    // Al igual que 'createdAt', tiene un valor por defecto que es la fecha actual.
+    updatedAt: {
+        type: Date,
+        default: Date.now
+    },
 });
+
+// Aplica el middleware 'pre' para que se ejecute antes de guardar el documento en la base de datos.
+// 'updateTimestamp' es un middleware que actualiza el campo 'updatedAt' cada vez que un documento es modificado.
+productSchema.pre('save', updateTimestamp);
 
 // Define el modelo 'Product' basado en el esquema 'productSchema'.
 // Este modelo será utilizado para interactuar con la colección 'products' en MongoDB.
