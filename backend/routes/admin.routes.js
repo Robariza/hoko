@@ -1,40 +1,24 @@
-// Importa el módulo 'Router' de Express para manejar solicitudes HTTP.
-import { Router } from "express";
-
-// Importa los controladores de admin que manejan las operaciones específicas para cada ruta.
+import express from 'express';
 import {
-    getAllUsers,
-    createUser,
-    updateUser,
-    deleteUser,
-    getAllOrders,
-    createOrder,
-    updateOrder,
-    deleteOrder,
-    getAllProducts,
-    updateProduct,
-    deleteProduct,
-} from "../controllers/admin.controller.js";
+    getAllAdmins,
+    createAdmin,
+    updateAdmin,
+    deleteAdmin
+} from '../controllers/admin.controller.js';
 
-// Crea una instancia del enrutador de Express.
-const router = Router();
+const router = express.Router();
 
-// Rutas para la gestión de usuarios
-router.get('/users', getAllUsers); // Obtiene todos los usuarios
-router.post('/users', createUser); // Crea un nuevo usuario
-router.put('/users/:id', updateUser); // Actualiza el usuario con el ID especificado
-router.delete('/users/:id', deleteUser); // Elimina el usuario con el ID especificado
+// Ruta para obtener todos los administradores
+router.get('/', getAllAdmins);
 
-// Rutas para la gestión de pedidos
-router.get('/orders', getAllOrders); // Obtiene todos los pedidos
-router.post('/orders', createOrder); // Crea un nuevo pedido
-router.put('/orders/:id', updateOrder); // Actualiza el pedido con el ID especificado
-router.delete('/orders/:id', deleteOrder); // Elimina el pedido con el ID especificado
+// Ruta para crear un nuevo administrador
+router.post('/', createAdmin);
 
-// Rutas para la gestión de productos
-router.get('/products', getAllProducts); // Obtiene todos los productos
-router.put('/products/:id', updateProduct); // Actualiza el producto con el ID especificado
-router.delete('/products/:id', deleteProduct); // Elimina el producto con el ID especificado
+// Ruta para actualizar un administrador existente por ID
+router.put('/:id', updateAdmin);
 
-// Exporta el enrutador para que pueda ser utilizado en otras partes de la aplicación.
+// Ruta para eliminar un administrador por ID
+router.delete('/:id', deleteAdmin);
+
+// Exporta el router para que pueda ser utilizado en otros archivos
 export default router;

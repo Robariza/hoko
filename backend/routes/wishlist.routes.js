@@ -1,27 +1,32 @@
-// Importa el módulo 'Router' de Express para manejar solicitudes HTTP.
-import { Router } from "express";
+// Importa las librerías necesarias.
+import express from 'express';
+import {
+    getAllWishlists,
+    createWishlist,
+    updateWishlist,
+    deleteWishlist,
+    getWishlistById
+} from '../controllers/wishlist.controller.js';
 
-// Importa los controladores de wishlist que manejan las operaciones específicas para cada ruta.
-import { getAllWishlists, createWishlist, updateWishlist, deleteWishlist } from "../controllers/wishlist.controller.js";
+// Crea un enrutador de Express.
+const router = express.Router();
 
-// Crea una instancia del enrutador de Express.
-const router = Router();
+// Define las rutas para las listas de deseos.
 
-// Define una ruta GET en la raíz ('/'), que al ser accedida ejecuta el controlador 'getAllWishlists'.
-// Esto significa que cuando se haga una solicitud GET a '/wishlists', se devolverán todas las listas de deseos.
+// Ruta para obtener todas las listas de deseos (GET).
 router.get('/', getAllWishlists);
 
-// Define una ruta POST en la raíz ('/'), que ejecuta el controlador 'createWishlist'.
-// Esto permite crear una nueva lista de deseos enviando una solicitud POST con los datos en el cuerpo de la solicitud.
+// Ruta para crear una nueva lista de deseos (POST).
 router.post('/', createWishlist);
 
-// Define una ruta PUT que recibe un parámetro dinámico ':id'.
-// Cuando se accede a esta ruta (por ejemplo, '/wishlists/123'), ejecuta el controlador 'updateWishlist' para actualizar la lista de deseos con ese ID.
+// Ruta para actualizar una lista de deseos existente (PUT).
 router.put('/:id', updateWishlist);
 
-// Define una ruta DELETE que también recibe un parámetro dinámico ':id'.
-// Al acceder a esta ruta (por ejemplo, '/wishlists/123'), se ejecuta el controlador 'deleteWishlist' para eliminar la lista de deseos con ese ID.
+// Ruta para eliminar una lista de deseos (DELETE).
 router.delete('/:id', deleteWishlist);
 
-// Exporta el enrutador para que pueda ser utilizado en otras partes de la aplicación, generalmente en el archivo principal (app.js o server.js).
+// Ruta para obtener una lista de deseos por ID (GET).
+router.get('/:id', getWishlistById);
+
+// Exporta el enrutador para que pueda ser utilizado en otras partes de la aplicación.
 export default router;

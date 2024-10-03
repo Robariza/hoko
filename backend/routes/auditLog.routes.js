@@ -1,31 +1,21 @@
-// Importa el módulo 'Router' de Express para manejar las rutas.
-import { Router } from "express";
+// Importa las librerías necesarias.
+import express from 'express';
+import AuditLogController from '../controllers/auditLog.controller.js';
 
-// Importa los controladores de registro de auditoría. 
-// Estos controladores manejarán las operaciones específicas para cada ruta.
-import {
-    getAllAuditLogs,
-    getAuditLogById,
-    createAuditLog,
-    deleteAuditLog
-} from "../controllers/auditLog.controller.js";
+// Crea un router de Express.
+const router = express.Router();
 
-// Crea una instancia del enrutador de Express.
-const router = Router();
+// Ruta para obtener todos los registros de auditoría.
+router.get('/', AuditLogController.getAll);
 
-// Define una ruta GET en la raíz ('/'), que devuelve todos los registros de auditoría.
-router.get('/', getAllAuditLogs);
+// Ruta para crear un nuevo registro de auditoría.
+router.post('/', AuditLogController.create);
 
-// Define una ruta GET que recibe un parámetro dinámico ':id'.
-// Al acceder a esta ruta, devuelve un registro de auditoría específico.
-router.get('/:id', getAuditLogById);
+// Ruta para obtener un registro de auditoría por ID.
+router.get('/:id', AuditLogController.getById);
 
-// Define una ruta POST en la raíz ('/'), que permite crear un nuevo registro de auditoría.
-router.post('/', createAuditLog);
+// Ruta para eliminar un registro de auditoría por ID.
+router.delete('/:id', AuditLogController.delete);
 
-// Define una ruta DELETE que recibe un parámetro dinámico ':id'.
-// Al acceder a esta ruta, elimina un registro de auditoría específico.
-router.delete('/:id', deleteAuditLog);
-
-// Exporta el enrutador para que pueda ser utilizado en otras partes de la aplicación.
+// Exporta las rutas definidas.
 export default router;
