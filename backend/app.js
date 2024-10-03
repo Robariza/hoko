@@ -17,6 +17,8 @@ import orderRoutes from './routes/order.routes.js';
 import reviewRoutes from './routes/review.routes.js';
 import wishlistRoutes from './routes/wishlist.routes.js';
 import auditLogRoutes from './routes/auditLog.routes.js';
+import categoryRoutes from './routes/category.routes.js';
+
 // Crea una instancia de la aplicación Express.
 const app = express();
 
@@ -38,6 +40,7 @@ app.use(cors());
 
 // Define las rutas para los productos. Todas las solicitudes que comiencen con '/products' se manejarán en 'productRoutes' (CRUD de productos).
 app.use('/products', productRoutes);
+app.use('/categories', categoryRoutes);
 app.use('/users', userRoutes);
 app.use('/orders', orderRoutes);
 app.use('/reviews', reviewRoutes);
