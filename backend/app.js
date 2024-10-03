@@ -18,6 +18,9 @@ import reviewRoutes from './routes/review.routes.js';
 import wishlistRoutes from './routes/wishlist.routes.js';
 import auditLogRoutes from './routes/auditLog.routes.js';
 import categoryRoutes from './routes/category.routes.js';
+import cartRoutes from './routes/cart.routes.js';
+import paymentRoutes from './routes/payment.routes.js';
+import shippingRoutes from './routes/shipping.routes.js';
 
 // Crea una instancia de la aplicación Express.
 const app = express();
@@ -46,6 +49,9 @@ app.use('/orders', orderRoutes);
 app.use('/reviews', reviewRoutes);
 app.use('/wishlists', wishlistRoutes);
 app.use('/auditLogs', auditLogRoutes);
+app.use('/cart', cartRoutes);
+app.use('/payments', paymentRoutes);
+app.use('/shipping', shippingRoutes);
 
 // Inicia el servidor en el puerto definido y escucha las solicitudes entrantes.
 // Muestra un mensaje en la consola para confirmar que el servidor está corriendo y en qué URL se está ejecutando.
