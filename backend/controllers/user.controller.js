@@ -1,10 +1,10 @@
 // Importa el modelo de usuario.
-import User from '../models/user.model.js';
+import { userModel } from "../models/user.model.js";
 
 // Función para obtener todos los usuarios.
 export const getAllUsers = async (req, res) => {
     try {
-        const users = await User.find(); // Obtiene todos los usuarios de la base de datos.
+        const users = await userModel.find(); // Obtiene todos los usuarios de la base de datos.
         res.status(200).json(users); // Devuelve una respuesta con los usuarios encontrados.
     } catch (error) {
         res.status(500).json({ message: 'Error al obtener los usuarios', error });
@@ -15,7 +15,7 @@ export const getAllUsers = async (req, res) => {
 export const createUser = async (req, res) => {
     const { name, email, password, role } = req.body; // Desestructura los datos del cuerpo de la solicitud.
 
-    const newUser = new User({ name, email, password, role }); // Crea una nueva instancia de usuario.
+    const newUser = new userModel({ name, email, password, role }); // Crea una nueva instancia de usuario.
 
     try {
         const savedUser = await newUser.save(); // Guarda el nuevo usuario en la base de datos.
@@ -31,7 +31,7 @@ export const updateUser = async (req, res) => {
     const updates = req.body; // Obtiene los datos que se quieren actualizar.
 
     try {
-        const updatedUser = await User.findByIdAndUpdate(id, updates, { new: true }); // Actualiza el usuario en la base de datos.
+        const updatedUser = await userModel.findByIdAndUpdate(id, updates, { new: true }); // Actualiza el usuario en la base de datos.
         if (!updatedUser) {
             return res.status(404).json({ message: 'Usuario no encontrado' });
         }
@@ -46,7 +46,7 @@ export const deleteUser = async (req, res) => {
     const { id } = req.params; // Obtiene el ID del usuario de los parámetros de la solicitud.
 
     try {
-        const deletedUser = await User.findByIdAndDelete(id); // Elimina el usuario de la base de datos.
+        const deletedUser = await userModel.findByIdAndDelete(id); // Elimina el usuario de la base de datos.
         if (!deletedUser) {
             return res.status(404).json({ message: 'Usuario no encontrado' });
         }
@@ -61,7 +61,7 @@ export const getUserById = async (req, res) => {
     const { id } = req.params; // Obtiene el ID del usuario de los parámetros de la solicitud.
 
     try {
-        const user = await User.findById(id); // Busca el usuario en la base de datos.
+        const user = await userModel.findById(id); // Busca el usuario en la base de datos.
         if (!user) {
             return res.status(404).json({ message: 'Usuario no encontrado' });
         }

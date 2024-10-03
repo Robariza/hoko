@@ -1,5 +1,6 @@
 // Importa la librería de Mongoose.
 import mongoose from 'mongoose';
+import { updateTimestamp } from '../middlewares/updateTimestamp.js';
 
 // Define un esquema para las órdenes.
 const orderSchema = new mongoose.Schema({
@@ -35,7 +36,7 @@ const orderSchema = new mongoose.Schema({
     // Estado de la orden.
     status: {
         type: String,
-        enum: ['pending', 'shipped', 'delivered', 'canceled'], // Estados permitidos
+        enum: ['pending', 'shipped', 'delivered', 'canceled'], 
         default: 'pending',
     },
 
@@ -53,10 +54,7 @@ const orderSchema = new mongoose.Schema({
 });
 
 // Middleware para actualizar el campo updatedAt antes de guardar.
-orderSchema.pre('save', function (next) {
-    this.updatedAt = Date.now(); // Actualiza la fecha de la última modificación
-    next();
-});
+orderSchema.pre('save', updateTimestamp);
 
 // Define el modelo 'Order' basado en el esquema 'orderSchema'.
 const orderModel = mongoose.model('Order', orderSchema);

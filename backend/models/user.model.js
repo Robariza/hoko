@@ -1,87 +1,60 @@
-// Importa la librería de Mongoose, que facilita la interacción con MongoDB usando modelos y esquemas.
 import mongoose from 'mongoose';
-
-// Importa la librería bcrypt para encriptar la contraseña.
-import bcrypt from 'bcrypt';
-
-// Importa un middleware personalizado llamado 'updateTimestamp' para actualizar el campo 'updatedAt' antes de guardar un documento.
 import { updateTimestamp } from '../middlewares/updateTimestamp.js';
 
-// Define un esquema para los usuarios, que representa la estructura de los documentos de usuarios en la base de datos.
-const userSchema = new mongoose.Schema({
-    
-    // Campo 'name', que es de tipo String y es obligatorio (required: true).
+const { Schema } = mongoose;
+
+// Define el esquema para el modelo de usuario
+const userSchema = new Schema({
+    // Nombre de usuario del usuario
     name: {
-        type: String,
-        required: true,
+        type: String, // El campo es de tipo cadena de texto
+        required: true, // Es obligatorio
+        trim: true // Elimina espacios en blanco al principio y al final
     },
-
-    // Campo 'email', que es de tipo String, obligatorio y único para cada usuario.
+    // Correo electrónico del usuario
     email: {
-        type: String,
-        required: true,
-        unique: true,
-        match: [/.+\@.+\..+/, 'Por favor ingresa un correo válido'],
+        type: String, 
+        required: true, 
+        unique: true, 
+        match: [/.+\@.+\..+/, 'Por favor, ingrese un correo válido'] // Valida que el correo tenga el formato adecuado
     },
-
-    // Campo 'password', que es de tipo String y es obligatorio. No se almacena en texto plano.
+    // Contraseña del usuario
     password: {
-        type: String,
-        required: true,
+        type: String, 
+        required: true 
     },
-
-    // Campo 'role', que indica si el usuario es un administrador o un cliente regular.
-    // El valor por defecto es 'user', pero puede ser 'admin'.
+    // Rol del usuario
     role: {
         type: String,
-        enum: ['user', 'admin'],
-        default: 'user',
+        enum: ['user', 'admin'], // Solo 'user' o 'admin' son valores válidos
+        default: 'user' // Valor por defecto
+    },        
+    // Dirección del usuario
+    address: {
+        type: String,
+        trim: true 
     },
-
-    // Campo 'createdAt', que es de tipo Date y almacena la fecha en la que se creó el usuario.
-    // Tiene un valor por defecto que es la fecha actual al momento de crear el usuario (Date.now).
+    // Número de teléfono del usuario
+    phone: {
+        type: String, 
+        trim: true 
+    },
+    // Fecha de creación del documento
     createdAt: {
-        type: Date,
-        default: Date.now,
+        type: Date, // El campo es de tipo fecha
+        default: Date.now // Se establece por defecto en la fecha y hora actual
     },
-
-    // Campo 'updatedAt', que es de tipo Date y almacena la fecha de la última actualización del usuario.
-    // Al igual que 'createdAt', tiene un valor por defecto que es la fecha actual.
+    // Fecha de la última actualización del documento
     updatedAt: {
-        type: Date,
-        default: Date.now,
+        type: Date, 
+        default: Date.now 
     },
 });
 
-// Aplica el middleware 'pre' para que se ejecute antes de guardar el documento en la base de datos.
-// En este caso, encriptamos la contraseña antes de guardarla.
-userSchema.pre('save', async function (next) {
-    // Solo encripta la contraseña si ha sido modificada o es nueva
-    if (!this.isModified('password')) {
-        return next();
-    }
-
-    try {
-        // Genera un "salt" y encripta la contraseña con bcrypt.
-        const salt = await bcrypt.genSalt(10);
-        this.password = await bcrypt.hash(this.password, salt);
-        next();
-    } catch (error) {
-        next(error);
-    }
-});
-
-// Aplica el middleware 'pre' para actualizar el campo 'updatedAt' antes de guardar el documento en la base de datos.
+// Aplica el middleware updateTimestamp antes de guardar el documento
+// Esto actualizará el campo 'updatedAt' cada vez que se guarde el documento
 userSchema.pre('save', updateTimestamp);
 
-// Método para comparar la contraseña ingresada con la encriptada en la base de datos.
-userSchema.methods.comparePassword = async function (password) {
-    return await bcrypt.compare(password, this.password);
-};
-
-// Define el modelo 'User' basado en el esquema 'userSchema'.
-// Este modelo será utilizado para interactuar con la colección 'users' en MongoDB.
-const userModel = mongoose.model('User', userSchema);
-
-// Exporta el modelo 'userModel' para que pueda ser utilizado en otras partes de la aplicación.
-export default userModel;
+// Crea y exporta el modelo 'User' basado en el esquema definido
+// Esto permite interactuar con la colección 'users' en MongoDB
+export const userModel = mongoose.model('User', userSchema);

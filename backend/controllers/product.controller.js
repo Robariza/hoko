@@ -1,6 +1,7 @@
 // Importa el modelo de productos desde el archivo donde está definido ('product.model.js').
 // Este modelo se utilizará para interactuar con la base de datos.
 import productModel from "../models/product.model.js";
+import categoryModel from "../models/category.model.js";
 
 // Controlador que obtiene todos los productos de la base de datos.
 export const getAllProducts = async (req, res) => {
@@ -19,17 +20,30 @@ export const getAllProducts = async (req, res) => {
 // Controlador que crea un nuevo producto en la base de datos.
 export const createProduct = async (req, res) => {
     try {
-        // Crea una nueva instancia del modelo 'productModel' usando los datos recibidos en 'req.body'.
-        const product = new productModel(req.body);
-        
-        // Guarda el nuevo producto en la base de datos.
-        await product.save();
-        
-        // Si la creación es exitosa, responde con un estado 200 (OK) y el producto recién creado en formato JSON.
-        res.status(200).json(product);
+        const { name, price, description, stock, categoryName, images } = req.body;
+
+        // Buscar la categoría por nombre
+        const category = await categoryModel.findOne({ name: categoryName });
+        if (!category) {
+            return res.status(404).json({ message: 'Categoría no encontrada.' });
+        }
+
+        // Crear el producto con el ID de la categoría encontrada
+        const newProduct = new productModel({
+            name,
+            price,
+            description,
+            stock,
+            category: category._id, // Aquí asignamos el ID de la categoría
+            images,
+        });
+
+        // Guardar el producto en la base de datos
+        await newProduct.save();
+
+        res.status(201).json({ message: 'Producto creado exitosamente.', product: newProduct });
     } catch (error) {
-        // Si ocurre un error al crear el producto, responde con un estado 500 y un mensaje de error.
-        res.status(500).json({ message: 'Error al crear producto.' });
+        res.status(500).json({ message: 'Error al crear producto.', error: error.message });
     }
 };
 

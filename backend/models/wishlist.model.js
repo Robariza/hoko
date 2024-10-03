@@ -1,5 +1,6 @@
 // Importa la librería de Mongoose.
 import mongoose from 'mongoose';
+import { updateTimestamp } from '../middlewares/updateTimestamp.js';
 
 // Define un esquema para las listas de deseos.
 const wishlistSchema = new mongoose.Schema({
@@ -32,10 +33,7 @@ const wishlistSchema = new mongoose.Schema({
 });
 
 // Middleware para actualizar el campo updatedAt antes de guardar.
-wishlistSchema.pre('save', function (next) {
-    this.updatedAt = Date.now(); // Actualiza la fecha de la última modificación
-    next();
-});
+wishlistSchema.pre('save', updateTimestamp);
 
 // Define el modelo 'Wishlist' basado en el esquema 'wishlistSchema'.
 const wishlistModel = mongoose.model('Wishlist', wishlistSchema);

@@ -1,5 +1,6 @@
 // Importa la librería de Mongoose.
 import mongoose from 'mongoose';
+import { updateTimestamp } from '../middlewares/updateTimestamp.js';
 
 // Define un esquema para las reseñas.
 const reviewSchema = new mongoose.Schema({
@@ -45,10 +46,7 @@ const reviewSchema = new mongoose.Schema({
 });
 
 // Middleware para actualizar el campo updatedAt antes de guardar.
-reviewSchema.pre('save', function (next) {
-    this.updatedAt = Date.now(); // Actualiza la fecha de la última modificación
-    next();
-});
+reviewSchema.pre('save', updateTimestamp);
 
 // Define el modelo 'Review' basado en el esquema 'reviewSchema'.
 const reviewModel = mongoose.model('Review', reviewSchema);
