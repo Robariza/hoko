@@ -12,7 +12,11 @@ import connectionMongo from './config/db.js';
 
 // Importa las rutas de productos desde el archivo 'product.routes.js', que contiene las rutas para las operaciones CRUD de productos.
 import productRoutes from './routes/product.routes.js';
-
+import userRoutes from './routes/user.routes.js';
+import orderRoutes from './routes/order.routes.js';
+import reviewRoutes from './routes/review.routes.js';
+import wishlistRoutes from './routes/wishlist.routes.js';
+import auditLogRoutes from './routes/auditLog.routes.js';
 // Crea una instancia de la aplicación Express.
 const app = express();
 
@@ -34,6 +38,11 @@ app.use(cors());
 
 // Define las rutas para los productos. Todas las solicitudes que comiencen con '/products' se manejarán en 'productRoutes' (CRUD de productos).
 app.use('/products', productRoutes);
+app.use('/users', userRoutes);
+app.use('/orders', orderRoutes);
+app.use('/reviews', reviewRoutes);
+app.use('/wishlists', wishlistRoutes);
+app.use('/auditLogs', auditLogRoutes);
 
 // Inicia el servidor en el puerto definido y escucha las solicitudes entrantes.
 // Muestra un mensaje en la consola para confirmar que el servidor está corriendo y en qué URL se está ejecutando.
